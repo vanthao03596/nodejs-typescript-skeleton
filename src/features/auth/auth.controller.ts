@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterInput, LoginInput } from './auth.validation';
+import { successResponse, handleConflictError, handleAuthenticationError, handleNotFoundError } from '../../utils/response.utils';
+import { HttpStatus } from '../../types/response.types';
 
 const authService = new AuthService();
 
@@ -10,17 +12,10 @@ export class AuthController {
       const data: RegisterInput = req.body;
       const result = await authService.register(data);
 
-      res.status(201).json({
-        success: true,
-        message: 'User registered successfully',
-        data: result,
-      });
+      successResponse(res, result, 'User registered successfully', HttpStatus.CREATED);
     } catch (error) {
       if (error instanceof Error && error.message === 'User already exists') {
-        res.status(409).json({
-          success: false,
-          message: error.message,
-        });
+        handleConflictError(res, error.message);
         return;
       }
       next(error);
@@ -32,17 +27,10 @@ export class AuthController {
       const data: LoginInput = req.body;
       const result = await authService.login(data);
 
-      res.status(200).json({
-        success: true,
-        message: 'Login successful',
-        data: result,
-      });
+      successResponse(res, result, 'Login successful');
     } catch (error) {
       if (error instanceof Error && error.message === 'Invalid credentials') {
-        res.status(401).json({
-          success: false,
-          message: error.message,
-        });
+        handleAuthenticationError(res, error.message);
         return;
       }
       next(error);
@@ -52,28 +40,18 @@ export class AuthController {
   async getProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       if (!req.user) {
-        res.status(401).json({
-          success: false,
-          message: 'User not authenticated',
-        });
+        handleAuthenticationError(res, 'User not authenticated');
         return;
       }
 
       const user = await authService.getUserById(req.user.id);
 
       if (!user) {
-        res.status(404).json({
-          success: false,
-          message: 'User not found',
-        });
+        handleNotFoundError(res, 'User not found');
         return;
       }
 
-      res.status(200).json({
-        success: true,
-        message: 'Profile retrieved successfully',
-        data: { user },
-      });
+      successResponse(res, { user }, 'Profile retrieved successfully');
     } catch (error) {
       next(error);
     }
