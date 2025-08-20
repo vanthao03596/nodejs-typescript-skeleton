@@ -70,7 +70,7 @@ export class AuthService {
     return { user: userWithoutPassword, token };
   }
 
-  async getUserById(userId: string): Promise<Omit<User, 'password'> | null> {
+  async getUserById(userId: number): Promise<Omit<User, 'password'> | null> {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {

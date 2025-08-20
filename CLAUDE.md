@@ -69,7 +69,7 @@ Standardized API responses using utilities in `src/utils/response.utils.ts`:
 ### Database Schema
 Uses Prisma with MySQL. Current schema includes:
 - `User` model with email, password, name, timestamps
-- UUID primary keys
+- INT primary keys
 - Snake_case database column mapping
 
 ### Authentication Flow
