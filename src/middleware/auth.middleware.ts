@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt.utils';
 import { prisma } from '../config/database';
+import { AuthenticationError } from '../utils/errors';
 
 export const authenticateToken = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
@@ -14,11 +15,7 @@ export const authenticateToken = async (
       : null;
 
     if (!token) {
-      res.status(401).json({
-        success: false,
-        message: 'Access token is required',
-      });
-      return;
+      return next(new AuthenticationError('Access token is required'));
     }
 
     const decoded = verifyToken(token);
@@ -35,27 +32,19 @@ export const authenticateToken = async (
     });
 
     if (!user) {
-      res.status(401).json({
-        success: false,
-        message: 'User not found',
-      });
-      return;
+      return next(new AuthenticationError('User not found'));
     }
 
     req.user = user;
     next();
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: 'Invalid or expired token',
-    });
-    return;
+    next(error);
   }
 };
 
 export const optionalAuth = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
@@ -87,6 +76,6 @@ export const optionalAuth = async (
 
     next();
   } catch (error) {
-    next();
+    next(error);
   }
 };

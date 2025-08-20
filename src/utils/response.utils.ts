@@ -16,7 +16,7 @@ export const successResponse = <T>(
   data?: T,
   message: string = 'Success',
   statusCode: number = HttpStatus.OK,
-  meta?: any
+  meta?: Record<string, unknown>
 ): void => {
   const response: ApiResponse<T> = {
     success: true,

@@ -13,6 +13,8 @@ A production-ready Node.js backend API skeleton built with TypeScript, Express.j
 - **Zod Validation**: Schema validation for requests
 - **Rate Limiting**: Built-in rate limiting with Redis
 - **Error Handling**: Comprehensive error handling middleware
+- **Standardized Responses**: Consistent API response format with error codes
+- **Pagination**: Built-in pagination utilities with Prisma integration
 - **Testing**: Jest setup with unit and integration tests
 - **Docker**: Production-ready containerization with Nginx
 - **PM2**: Process management for production deployment
@@ -39,11 +41,15 @@ src/
 │   ├── rateLimiter.middleware.ts
 │   └── validation.middleware.ts
 ├── utils/            # Utility functions
+│   ├── errors.ts
 │   ├── jwt.utils.ts
+│   ├── pagination.utils.ts
 │   ├── password.utils.ts
-│   └── redis.utils.ts
+│   ├── redis.utils.ts
+│   └── response.utils.ts
 ├── types/            # TypeScript type definitions
-│   └── express.d.ts
+│   ├── express.d.ts
+│   └── response.types.ts
 ├── app.ts           # Express app configuration
 └── server.ts        # Server startup and configuration
 ```
@@ -236,7 +242,8 @@ npm test -- --coverage
 - **JWT Authentication**: Secure token-based auth
 - **Password Hashing**: Bcrypt password hashing
 - **Input Validation**: Zod schema validation
-- **Error Handling**: Secure error responses
+- **Error Handling**: Secure error responses with standardized format
+- **Response Utilities**: Consistent API responses with snake_case naming
 
 ## 📦 Production Considerations
 

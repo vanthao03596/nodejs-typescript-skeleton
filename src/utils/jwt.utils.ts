@@ -15,17 +15,13 @@ export const generateToken = (payload: Omit<JwtPayload, 'iat' | 'exp'>): string 
 };
 
 export const verifyToken = (token: string): JwtPayload => {
-  try {
-    return jwt.verify(token, env.JWT_SECRET) as JwtPayload;
-  } catch (error) {
-    throw new Error('Invalid or expired token');
-  }
+  return jwt.verify(token, env.JWT_SECRET) as JwtPayload;
 };
 
 export const decodeToken = (token: string): JwtPayload | null => {
   try {
     return jwt.decode(token) as JwtPayload;
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 };

@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
+import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { env } from '../config/env';
 import { errorResponse, handleValidationError } from '../utils/response.utils';
-import { ErrorCode } from '../types/response.types';
+import { ErrorCode, HttpStatus } from '../types/response.types';
+import { AppError } from '../utils/errors';
 
 interface CustomError extends Error {
   statusCode?: number;
@@ -11,11 +13,11 @@ interface CustomError extends Error {
 
 export const errorHandler = (
   error: CustomError,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): void => {
-  let statusCode = error.statusCode || error.status || 500;
+  let statusCode = error.statusCode || error.status || HttpStatus.INTERNAL_SERVER_ERROR;
   let message = error.message || 'Internal Server Error';
   let errorCode: ErrorCode | undefined;
 
@@ -26,22 +28,46 @@ export const errorHandler = (
     return;
   }
 
-  if (error.name === 'JsonWebTokenError') {
-    statusCode = 401;
+  if (error instanceof AppError) {
+    const stack = env.NODE_ENV === 'development' ? error.stack : undefined;
+    errorResponse(res, error.message, error.statusCode, error.errorCode, undefined, stack);
+    return;
+  }
+
+  // Handle Prisma errors
+  if (error instanceof PrismaClientKnownRequestError) {
+    if (error.code === 'P2002') {
+      // Unique constraint violation
+      statusCode = HttpStatus.CONFLICT;
+      message = 'Resource already exists';
+      errorCode = ErrorCode.CONFLICT;
+    } else if (error.code === 'P2025') {
+      // Record not found
+      statusCode = HttpStatus.NOT_FOUND;
+      message = 'Resource not found';
+      errorCode = ErrorCode.NOT_FOUND;
+    } else {
+      statusCode = HttpStatus.BAD_REQUEST;
+      message = 'Database operation failed';
+      errorCode = ErrorCode.VALIDATION_ERROR;
+    }
+  } else if (error instanceof PrismaClientUnknownRequestError) {
+    statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+    message = 'Database connection error';
+    errorCode = ErrorCode.INTERNAL_ERROR;
+  } else if (error instanceof PrismaClientValidationError) {
+    statusCode = HttpStatus.BAD_REQUEST;
+    message = 'Invalid data provided';
+    errorCode = ErrorCode.VALIDATION_ERROR;
+  } else if (error.name === 'JsonWebTokenError') {
+    statusCode = HttpStatus.UNAUTHORIZED;
     message = 'Invalid token';
     errorCode = ErrorCode.INVALID_TOKEN;
   } else if (error.name === 'TokenExpiredError') {
-    statusCode = 401;
+    statusCode = HttpStatus.UNAUTHORIZED;
     message = 'Token expired';
     errorCode = ErrorCode.TOKEN_EXPIRED;
-  } else if (error.name === 'CastError') {
-    statusCode = 400;
-    message = 'Invalid ID format';
-    errorCode = ErrorCode.VALIDATION_ERROR;
-  } else if (error.name === 'ValidationError') {
-    statusCode = 400;
-    errorCode = ErrorCode.VALIDATION_ERROR;
-  } else if (statusCode >= 500) {
+  } else if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
     errorCode = ErrorCode.INTERNAL_ERROR;
   }
 
@@ -49,5 +75,5 @@ export const errorHandler = (
 };
 
 export const notFound = (req: Request, res: Response) => {
-  errorResponse(res, `Route ${req.originalUrl} not found`, 404, ErrorCode.NOT_FOUND);
+  errorResponse(res, `Route ${req.originalUrl} not found`, HttpStatus.NOT_FOUND, ErrorCode.NOT_FOUND);
 };

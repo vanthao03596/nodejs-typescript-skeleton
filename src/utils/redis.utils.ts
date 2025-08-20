@@ -2,7 +2,7 @@ import { redis } from '../config/redis';
 
 export const setCache = async (
   key: string,
-  value: any,
+  value: unknown,
   ttlSeconds?: number
 ): Promise<void> => {
   try {
@@ -19,7 +19,7 @@ export const setCache = async (
   }
 };
 
-export const getCache = async <T = any>(key: string): Promise<T | null> => {
+export const getCache = async <T = unknown>(key: string): Promise<T | null> => {
   try {
     const value = await redis.get(key);
     

@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterInput, LoginInput } from './auth.validation';
-import { successResponse, handleConflictError, handleAuthenticationError, handleNotFoundError } from '../../utils/response.utils';
+import { successResponse } from '../../utils/response.utils';
 import { HttpStatus } from '../../types/response.types';
+import { AuthenticationError, NotFoundError } from '../../utils/errors';
 
 const authService = new AuthService();
 
@@ -14,10 +15,6 @@ export class AuthController {
 
       successResponse(res, result, 'User registered successfully', HttpStatus.CREATED);
     } catch (error) {
-      if (error instanceof Error && error.message === 'User already exists') {
-        handleConflictError(res, error.message);
-        return;
-      }
       next(error);
     }
   }
@@ -29,10 +26,6 @@ export class AuthController {
 
       successResponse(res, result, 'Login successful');
     } catch (error) {
-      if (error instanceof Error && error.message === 'Invalid credentials') {
-        handleAuthenticationError(res, error.message);
-        return;
-      }
       next(error);
     }
   }
@@ -40,15 +33,13 @@ export class AuthController {
   async getProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       if (!req.user) {
-        handleAuthenticationError(res, 'User not authenticated');
-        return;
+        throw new AuthenticationError('User not authenticated');
       }
 
       const user = await authService.getUserById(req.user.id);
 
       if (!user) {
-        handleNotFoundError(res, 'User not found');
-        return;
+        throw new NotFoundError('User not found');
       }
 
       successResponse(res, { user }, 'Profile retrieved successfully');

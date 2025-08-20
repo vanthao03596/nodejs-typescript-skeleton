@@ -12,6 +12,7 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default('24h'),
   RATE_LIMIT_WINDOW: z.string().default('15m'),
   RATE_LIMIT_MAX: z.string().default('5').transform(Number),
+  CORS_ORIGINS: z.string().optional().transform(val => val ? val.split(',') : undefined),
 });
 
 export type Env = z.infer<typeof envSchema>;

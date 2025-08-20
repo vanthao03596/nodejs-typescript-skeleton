@@ -5,7 +5,7 @@ const SALT_ROUNDS = 10;
 export const hashPassword = async (password: string): Promise<string> => {
   try {
     return await bcrypt.hash(password, SALT_ROUNDS);
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Error hashing password');
   }
 };
@@ -16,7 +16,7 @@ export const comparePassword = async (
 ): Promise<boolean> => {
   try {
     return await bcrypt.compare(password, hashedPassword);
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Error comparing password');
   }
 };

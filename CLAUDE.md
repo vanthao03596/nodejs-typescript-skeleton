@@ -54,6 +54,17 @@ The codebase follows a feature-based structure under `src/features/`:
 - `jwt.utils.ts`: JWT token creation/verification
 - `password.utils.ts`: Bcrypt password hashing
 - `redis.utils.ts`: Redis helper functions
+- `response.utils.ts`: Standardized API response utilities
+- `pagination.utils.ts`: Pagination helpers with Prisma integration
+- `errors.ts`: Custom error classes extending base AppError
+
+### Response System
+Standardized API responses using utilities in `src/utils/response.utils.ts`:
+- `successResponse()`: Standard success responses with optional data/meta
+- `paginatedResponse()`: Paginated data responses with meta information
+- `errorResponse()`: Consistent error responses with error codes
+- All responses follow snake_case naming convention
+- Error responses include stack traces in development mode only
 
 ### Database Schema
 Uses Prisma with MySQL. Current schema includes:

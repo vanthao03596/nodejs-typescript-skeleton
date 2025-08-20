@@ -3,6 +3,7 @@ import { prisma } from '../../config/database';
 import { hashPassword, comparePassword } from '../../utils/password.utils';
 import { generateToken } from '../../utils/jwt.utils';
 import { RegisterInput, LoginInput } from './auth.validation';
+import { ConflictError, AuthenticationError } from '../../utils/errors';
 
 export interface AuthResponse {
   user: Omit<User, 'password'>;
@@ -16,7 +17,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new ConflictError('User already exists');
     }
 
     const hashedPassword = await hashPassword(data.password);
@@ -50,13 +51,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new AuthenticationError('Invalid credentials');
     }
 
     const isPasswordValid = await comparePassword(data.password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error('Invalid credentials');
+      throw new AuthenticationError('Invalid credentials');
     }
 
     const { password, ...userWithoutPassword } = user;

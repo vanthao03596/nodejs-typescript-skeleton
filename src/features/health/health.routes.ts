@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express';
 import { prisma } from '../../config/database';
 import { redis } from '../../config/redis';
 import { env } from '../../config/env';
+import { successResponse, errorResponse } from '../../utils/response.utils';
+import { HttpStatus } from '../../types/response.types';
 
 const router = Router();
 
@@ -36,10 +38,11 @@ router.get('/', async (req: Request, res: Response) => {
     health.services.database === 'connected' && 
     health.services.redis === 'connected';
 
-  res.status(isHealthy ? 200 : 503).json({
-    success: isHealthy,
-    data: health,
-  });
+  if (isHealthy) {
+    successResponse(res, health, 'Service is healthy', HttpStatus.OK);
+  } else {
+    errorResponse(res, 'Service is unhealthy', 503);
+  }
 });
 
 export { router as healthRoutes };

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { redis } from '../config/redis';
 import { env } from '../config/env';
+import { RateLimitError } from '../utils/errors';
 
 interface RateLimitOptions {
   windowMs: number;
@@ -17,20 +18,13 @@ export const createRateLimiter = (options: RateLimitOptions) => {
     message = 'Too many requests, please try again later.',
   } = options;
 
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
       const key = `rate_limit:${keyGenerator(req)}`;
       const currentCount = await redis.get(key);
 
       if (currentCount && parseInt(currentCount, 10) >= maxRequests) {
-        const ttl = await redis.ttl(key);
-        
-        res.status(429).json({
-          success: false,
-          message,
-          retryAfter: ttl,
-        });
-        return;
+        return next(new RateLimitError(message));
       }
 
       await redis.multi()

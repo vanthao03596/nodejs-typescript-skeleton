@@ -48,7 +48,7 @@ export const createPaginationMeta = (
   };
 };
 
-export const getPaginationFromQuery = (query: any): PaginationOptions => {
+export const getPaginationFromQuery = (query: Record<string, unknown>): PaginationOptions => {
   const page = query.page ? parseInt(query.page as string, 10) : undefined;
   const limit = query.limit ? parseInt(query.limit as string, 10) : undefined;
 
