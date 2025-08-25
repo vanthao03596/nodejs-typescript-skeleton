@@ -23,8 +23,11 @@ export const connectRedis = async () => {
 
 export const disconnectRedis = async () => {
   try {
-    redis.destroy();
-    console.log('Redis disconnected');
+    if (redis.isOpen) {
+      redis.destroy();
+      console.log('Redis disconnected');
+    }
+
   } catch (error) {
     console.error('Error disconnecting from Redis:', error);
   }
