@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ZodValidationError } from 'src/utils/errors';
+import { ZodValidationError } from '../utils/errors';
 import { z } from 'zod';
 
 export type ValidationTarget = 'body' | 'query' | 'params';

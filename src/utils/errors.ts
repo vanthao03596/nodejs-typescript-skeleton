@@ -1,4 +1,4 @@
-import { ValidationTarget } from 'src/middleware/validation.middleware';
+import { ValidationTarget } from '../middleware/validation.middleware';
 import { ErrorCode, HttpStatus } from '../types/response.types';
 import { z } from 'zod';
 
