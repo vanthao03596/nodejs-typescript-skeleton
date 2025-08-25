@@ -1,5 +1,4 @@
 import { Response } from 'express';
-import { ZodError } from 'zod';
 import { env } from '../config/env';
 import { 
   ApiResponse, 
@@ -10,6 +9,7 @@ import {
   ErrorCode,
   HttpStatus 
 } from '../types/response.types';
+import { ZodValidationError } from './errors';
 
 export const successResponse = <T>(
   res: Response,
@@ -64,11 +64,20 @@ export const errorResponse = (
   res.status(statusCode).json(response);
 };
 
-export const handleValidationError = (res: Response, error: ZodError): void => {
-  const validationErrors: ValidationError[] = error.issues.map((issue) => ({
-    field: issue.path.join('.'),
-    message: issue.message
-  }));
+export const handleValidationError = (res: Response, error: ZodValidationError): void => {
+  const validationErrors = error.zodError.issues.map((issue) => {
+    const field = issue.path.length > 0 
+      ? issue.path.join('.') 
+      : error.target;
+    
+    let message = issue.message;
+
+    if (issue.path.length === 0) {
+      message = `${error.target.charAt(0).toUpperCase() + error.target.slice(1)} is required`;
+    }
+    
+    return { field, message };
+  });
 
   errorResponse(
     res,

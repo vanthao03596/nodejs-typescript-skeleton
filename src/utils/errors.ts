@@ -1,4 +1,6 @@
+import { ValidationTarget } from 'src/middleware/validation.middleware';
 import { ErrorCode, HttpStatus } from '../types/response.types';
+import { z } from 'zod';
 
 export class AppError extends Error {
   public readonly statusCode: number;
@@ -53,5 +55,19 @@ export class RateLimitError extends AppError {
 export class InternalServerError extends AppError {
   constructor(message: string = 'Internal server error') {
     super(message, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_ERROR);
+  }
+}
+
+export class ZodValidationError extends AppError {
+  public readonly zodError: z.ZodError;
+  public readonly target: ValidationTarget;
+
+  constructor(
+    zodError: z.ZodError,
+    target: ValidationTarget,
+  ) {
+    super('Validation Error', HttpStatus.BAD_REQUEST, ErrorCode.VALIDATION_ERROR);
+    this.zodError = zodError;
+    this.target = target;
   }
 }

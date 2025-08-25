@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { ZodError } from 'zod';
 import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { env } from '../config/env';
 import { errorResponse, handleValidationError } from '../utils/response.utils';
 import { ErrorCode, HttpStatus } from '../types/response.types';
-import { AppError } from '../utils/errors';
+import { AppError, ZodValidationError } from '../utils/errors';
 
 interface CustomError extends Error {
   statusCode?: number;
@@ -23,7 +22,7 @@ export const errorHandler = (
 
   console.error('Error:', error);
 
-  if (error instanceof ZodError) {
+  if (error instanceof ZodValidationError) {
     handleValidationError(res, error);
     return;
   }
