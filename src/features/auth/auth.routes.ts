@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AuthController } from './auth.controller';
-import { validateRequest } from '../../middleware/validation.middleware';
+import { validateBody } from '../../middleware/validation.middleware';
 import { authenticateToken } from '../../middleware/auth.middleware';
 import { authRateLimit } from '../../middleware/rateLimiter.middleware';
 import { registerSchema, loginSchema } from './auth.validation';
@@ -11,14 +11,14 @@ const authController = new AuthController();
 router.post(
   '/register',
   authRateLimit,
-  validateRequest(registerSchema),
+  validateBody(registerSchema),
   authController.register
 );
 
 router.post(
   '/login',
   authRateLimit,
-  validateRequest(loginSchema),
+  validateBody(loginSchema),
   authController.login
 );
 

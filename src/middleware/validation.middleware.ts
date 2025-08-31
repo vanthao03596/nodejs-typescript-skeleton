@@ -18,9 +18,9 @@ export const validateRequest = <T extends z.ZodTypeAny>(
 
       const validated = await schema.parseAsync(dataToValidate);
 
-      if (target === 'body') req.body = validated;
-      else if (target === 'query') req.query = validated as Request['query'];
-      else if (target === 'params') req.params = validated as Request['params'];
+      if (target === 'body') req.validatedBody = validated;
+      else if (target === 'query') req.validatedQuery = validated;
+      else if (target === 'params') req.validatedParams = validated;
 
       next();
     } catch (error) {
@@ -32,6 +32,15 @@ export const validateRequest = <T extends z.ZodTypeAny>(
     }
   };
 };
+
+export const validateBody = <T extends z.ZodTypeAny>(schema: T) => 
+  validateRequest(schema, 'body');
+
+export const validateParams = <T extends z.ZodTypeAny>(schema: T) => 
+  validateRequest(schema, 'params');
+
+export const validateQuery = <T extends z.ZodTypeAny>(schema: T) => 
+  validateRequest(schema, 'query');
 
 function getValidationData(req: Request, target: ValidationTarget) {
   switch (target) {

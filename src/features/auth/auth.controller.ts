@@ -10,7 +10,7 @@ const authService = new AuthService();
 export class AuthController {
   async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data: RegisterInput = req.body;
+      const data = req.validatedBody as RegisterInput;
       const result = await authService.register(data);
 
       successResponse(res, result, 'User registered successfully', HttpStatus.CREATED);
@@ -21,7 +21,7 @@ export class AuthController {
 
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data: LoginInput = req.body;
+      const data = req.validatedBody as LoginInput;
       const result = await authService.login(data);
 
       successResponse(res, result, 'Login successful');
