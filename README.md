@@ -1,6 +1,6 @@
 # Node.js Backend API Skeleton
 
-A production-ready Node.js backend API skeleton built with TypeScript, Express.js, Prisma, and Redis. Features authentication, validation, rate limiting, and comprehensive testing.
+A Node.js backend API skeleton built with TypeScript, Express.js, Prisma, and Redis. Features authentication, validation, rate limiting, and comprehensive testing.
 
 ## 🚀 Features
 
@@ -16,7 +16,7 @@ A production-ready Node.js backend API skeleton built with TypeScript, Express.j
 - **Standardized Responses**: Consistent API response format with error codes
 - **Pagination**: Built-in pagination utilities with Prisma integration
 - **Testing**: Jest setup with unit and integration tests
-- **Docker**: Production-ready containerization with Nginx
+- **Docker**: Containerization with Nginx
 - **PM2**: Process management for production deployment
 
 ## 📁 Project Structure

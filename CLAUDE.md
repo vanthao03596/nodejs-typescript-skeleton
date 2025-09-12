@@ -6,6 +6,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Node.js backend API skeleton built with TypeScript, Express.js, Prisma ORM, and Redis. It provides JWT-based authentication, rate limiting, input validation, and comprehensive error handling.
 
+## Core Development Philosophy
+
+### KISS (Keep It Simple, Stupid)
+Simplicity should be a key goal in design. Choose straightforward solutions over complex ones whenever possible. Simple solutions are easier to understand, maintain, and debug.
+
+### YAGNI (You Aren't Gonna Need It)
+Avoid building functionality on speculation. Implement features only when they are needed, not when you anticipate they might be useful in the future.
+
+## 🤖 AI Assistant Guidelines
+
+### Context Awareness
+- When implementing features, always check existing patterns first
+- Prefer composition over inheritance in all designs
+- Use existing utilities before creating new ones
+- Check for similar functionality in other domains/features
+
+### Common Pitfalls to Avoid
+- Creating duplicate functionality
+- Overwriting existing tests
+- Modifying core frameworks without explicit instruction
+- Adding dependencies without checking existing alternatives
+
+### Workflow Patterns
+- Use "think hard" for architecture decisions
+- Break complex tasks into smaller, testable units
+- Validate understanding before implementation
+
 ## Common Development Commands
 
 ```bash
