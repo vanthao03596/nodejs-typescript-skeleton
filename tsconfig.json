@@ -23,7 +23,7 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "baseUrl": "./",
-    "types": ["node", "jest"],
+    "types": ["node", "vitest/globals"],
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": [

@@ -1,34 +1,35 @@
+import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
 import { AuthService } from '../../src/features/auth/auth.service';
 import { hashPassword } from '../../src/utils/password.utils';
 import { prisma } from '../../src/config/database';
 
-jest.mock('../../src/config/database', () => ({
+vi.mock('../../src/config/database', () => ({
   prisma: {
     user: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
     },
   },
 }));
 
-jest.mock('../../src/utils/password.utils', () => ({
-  hashPassword: jest.fn(),
-  comparePassword: jest.fn(),
+vi.mock('../../src/utils/password.utils', () => ({
+  hashPassword: vi.fn(),
+  comparePassword: vi.fn(),
 }));
 
-jest.mock('../../src/utils/jwt.utils', () => ({
-  generateToken: jest.fn(() => 'mock-token'),
+vi.mock('../../src/utils/jwt.utils', () => ({
+  generateToken: vi.fn(() => 'mock-token'),
 }));
 
-const mockPrisma = prisma as jest.Mocked<typeof prisma>;
-const mockHashPassword = hashPassword as jest.MockedFunction<typeof hashPassword>;
+const mockPrisma = prisma;
+const mockHashPassword = hashPassword as Mock;
 
 describe('AuthService', () => {
   let authService: AuthService;
 
   beforeEach(() => {
     authService = new AuthService();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('register', () => {
@@ -39,9 +40,9 @@ describe('AuthService', () => {
     };
 
     it('should register a new user successfully', async () => {
-      (mockPrisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+      (mockPrisma.user.findUnique as Mock).mockResolvedValue(null);
       mockHashPassword.mockResolvedValue('hashed-password');
-      (mockPrisma.user.create as jest.Mock).mockResolvedValue({
+      (mockPrisma.user.create as Mock).mockResolvedValue({
         id: '1',
         email: 'test@example.com',
         name: 'Test User',
@@ -62,7 +63,7 @@ describe('AuthService', () => {
     });
 
     it('should throw error if user already exists', async () => {
-      (mockPrisma.user.findUnique as jest.Mock).mockResolvedValue({
+      (mockPrisma.user.findUnique as Mock).mockResolvedValue({
         id: '1',
         email: 'test@example.com',
       });

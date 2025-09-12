@@ -42,8 +42,10 @@ npm run build           # Compile TypeScript to dist/
 npm run start           # Start production server from dist/
 
 # Testing
-npm test                # Run Jest test suite
+npm test                # Run Vitest test suite
 npm run test:watch      # Run tests in watch mode
+npm run test:ui         # Run tests with Vitest UI
+npm run test:coverage   # Run tests with coverage report
 
 # Code Quality
 npm run lint            # Lint TypeScript files with ESLint
@@ -107,11 +109,12 @@ Uses Prisma with MySQL. Current schema includes:
 
 ## Testing Setup
 
-- Jest with TypeScript support via ts-jest
+- Vitest with TypeScript support (migrated from Jest)
 - Test files in `tests/` directory with `unit/` and `integration/` subdirectories
-- Coverage collection configured for `src/` files
+- Coverage collection configured for `src/` files (excluding `server.ts`)
 - Test setup file at `tests/setup.ts`
 - 10-second test timeout configured
+- Additional commands: `npm run test:ui` for Vitest UI, `npm run test:coverage` for coverage reports
 
 ## Environment Variables
 

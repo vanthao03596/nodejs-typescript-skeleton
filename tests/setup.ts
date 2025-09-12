@@ -1,3 +1,4 @@
+import { beforeAll, afterAll } from 'vitest';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.test' });

@@ -1,16 +1,17 @@
+import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import { app } from '../test-app';
 
 // Mock database and redis connections for testing
-jest.mock('../../src/config/database', () => ({
+vi.mock('../../src/config/database', () => ({
   prisma: {
-    $queryRaw: jest.fn().mockResolvedValue([{ 1: 1 }]),
+    $queryRaw: vi.fn().mockResolvedValue([{ 1: 1 }]),
   },
 }));
 
-jest.mock('../../src/config/redis', () => ({
+vi.mock('../../src/config/redis', () => ({
   redis: {
-    ping: jest.fn().mockResolvedValue('PONG'),
+    ping: vi.fn().mockResolvedValue('PONG'),
   },
 }));
 

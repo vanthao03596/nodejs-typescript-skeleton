@@ -15,7 +15,7 @@ A Node.js backend API skeleton built with TypeScript, Express.js, Prisma, and Re
 - **Error Handling**: Comprehensive error handling middleware
 - **Standardized Responses**: Consistent API response format with error codes
 - **Pagination**: Built-in pagination utilities with Prisma integration
-- **Testing**: Jest setup with unit and integration tests
+- **Testing**: Vitest setup with unit and integration tests
 - **Docker**: Containerization with Nginx
 - **PM2**: Process management for production deployment
 
