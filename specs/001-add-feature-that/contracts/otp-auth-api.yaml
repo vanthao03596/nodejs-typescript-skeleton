@@ -1,0 +1,254 @@
+openapi: 3.0.0
+info:
+  title: OTP Authentication API
+  version: 1.0.0
+  description: API endpoints for OTP-based email authentication
+
+paths:
+  /api/auth/otp/request:
+    post:
+      summary: Request OTP code
+      description: Send an OTP code to the specified email address
+      tags:
+        - OTP Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                  description: Email address to send OTP
+      responses:
+        '200':
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+                message: OTP sent successfully
+                data:
+                  email: user@example.com
+                  expires_in: 600
+        '400':
+          description: Invalid email format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: Too many OTP requests. Please try again later.
+                error:
+                  code: RATE_LIMIT_EXCEEDED
+                  details: Maximum 3 requests per 15 minutes
+
+  /api/auth/otp/verify:
+    post:
+      summary: Verify OTP code
+      description: Verify the OTP code and authenticate the user
+      tags:
+        - OTP Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - code
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                  description: Email address associated with OTP
+                code:
+                  type: string
+                  pattern: '^[0-9]{6}$'
+                  example: '123456'
+                  description: 6-digit OTP code
+      responses:
+        '200':
+          description: OTP verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Authentication successful
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+                      token:
+                        type: string
+                        description: JWT authentication token
+                        example: eyJhbGciOiJIUzI1NiIs...
+                      expires_at:
+                        type: string
+                        format: date-time
+                        description: Token expiration time
+        '400':
+          description: Invalid OTP code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: Invalid or expired OTP code
+                error:
+                  code: INVALID_OTP
+                  attempts_remaining: 3
+        '403':
+          description: OTP blocked due to too many attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: OTP blocked due to too many failed attempts
+                error:
+                  code: OTP_BLOCKED
+
+  /api/auth/otp/status:
+    get:
+      summary: Check OTP request status
+      description: Check if there's an active OTP request for an email
+      tags:
+        - OTP Authentication
+      parameters:
+        - in: query
+          name: email
+          required: true
+          schema:
+            type: string
+            format: email
+          description: Email address to check
+      responses:
+        '200':
+          description: OTP status retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      has_active_otp:
+                        type: boolean
+                        example: true
+                      expires_in_seconds:
+                        type: integer
+                        example: 480
+                        description: Seconds until OTP expires
+                      attempts_used:
+                        type: integer
+                        example: 1
+                        description: Number of verification attempts used
+                      can_request_new:
+                        type: boolean
+                        example: false
+                        description: Whether a new OTP can be requested
+                      next_request_available_in:
+                        type: integer
+                        example: 720
+                        description: Seconds until new OTP can be requested
+        '400':
+          description: Invalid email format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Operation completed successfully
+        data:
+          type: object
+          description: Response data
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: An error occurred
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: ERROR_CODE
+            details:
+              type: object
+              description: Additional error details
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        name:
+          type: string
+          nullable: true
+          example: John Doe
+        created_via:
+          type: string
+          enum: [password, otp]
+          example: otp
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
