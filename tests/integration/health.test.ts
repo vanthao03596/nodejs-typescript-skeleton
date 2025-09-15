@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
-import { app } from '../test-app';
+import { app } from '../../src/app';
 
 // Mock database and redis connections for testing
 vi.mock('../../src/config/database', () => ({
@@ -37,8 +37,10 @@ describe('Health Endpoint', () => {
     expect(response.body).toEqual({
       success: true,
       message: 'Node.js API Server',
-      version: '1.0.0',
-      environment: 'test',
+      data: {
+        version: '1.0.0',
+        environment: 'test',
+      },
     });
   });
 
