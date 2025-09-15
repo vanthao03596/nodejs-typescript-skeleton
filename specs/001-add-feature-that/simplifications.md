@@ -29,7 +29,7 @@ const otpRateLimit = createRateLimiter({
 **Simplification**: Merge into T002
 **Action**: DELETE T026
 
-### 3. ⚠️ Task T008: GET /api/auth/otp/status Endpoint
+### 3. ⚠️ Task T008: GET /api/v1/auth/otp/status Endpoint
 **Current Plan**: Implement status checking endpoint
 **Issue**: YAGNI - This endpoint exposes information that could help attackers
 **Consideration**: Do we really need to tell users how many attempts remain?

@@ -56,34 +56,34 @@
 - **Controllers**: `[feature].controller.ts` for request handling
 - **Services**: `[feature].service.ts` for business logic
 
-## Phase 3.1: Setup
-- [ ] T001 Install Mailgun.js dependency (npm install mailgun.js) - See research.md:7-25 for Mailgun.js decision
-- [ ] T002 [P] Create email configuration in src/config/email.ts - Include all env vars from quickstart.md:20-35
-- [ ] T003 [P] Create OTP utilities in src/utils/otp.utils.ts - See research.md:57-73 for OTP generation specs
-- [ ] T004 [P] Create email utilities with provider factory in src/utils/email.utils.ts - See research.md:41-52 for factory pattern
-- [ ] T005 Update .env.example with Mailgun and OTP configuration variables - See quickstart.md:20-35 for env vars
+## Phase 3.1: Setup ✅ COMPLETED
+- [x] T001 Install Mailgun.js dependency (npm install mailgun.js) - See research.md:7-25 for Mailgun.js decision
+- [x] T002 [P] Create email configuration in src/config/email.ts - Include all env vars from quickstart.md:20-35
+- [x] T003 [P] Create OTP utilities in src/utils/otp.utils.ts - See research.md:57-73 for OTP generation specs
+- [x] T004 [P] Create email utilities with provider factory in src/utils/email.utils.ts - See research.md:41-52 for factory pattern
+- [x] T005 Update .env.example with Mailgun and OTP configuration variables - See quickstart.md:20-35 for env vars
 
-## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
+## Phase 3.2: Tests First (TDD) ✅ COMPLETED
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
-- [ ] T006 [P] Contract test POST /api/auth/otp/request in tests/integration/features/otp-auth/request.test.ts - See contracts/otp-auth-api.yaml:8-59
-- [ ] T007 [P] Contract test POST /api/auth/otp/verify in tests/integration/features/otp-auth/verify.test.ts - See contracts/otp-auth-api.yaml:61-136
-- [ ] T008 [P] Contract test GET /api/auth/otp/status in tests/integration/features/otp-auth/status.test.ts - See contracts/otp-auth-api.yaml:138-190
-- [ ] T009 [P] Integration test new user OTP registration flow in tests/integration/features/otp-auth/new-user-flow.test.ts - See quickstart.md:51-105
-- [ ] T010 [P] Integration test existing user OTP login flow in tests/integration/features/otp-auth/existing-user-flow.test.ts - See quickstart.md:107-127
-- [ ] T011 [P] Integration test rate limiting (3 per 15 min) in tests/integration/features/otp-auth/rate-limiting.test.ts - See quickstart.md:152-173
-- [ ] T012 [P] Unit test OTP generation and validation in tests/unit/utils/otp.utils.test.ts - See research.md:57-73
-- [ ] T013 [P] Unit test email provider factory in tests/unit/utils/email.utils.test.ts - See research.md:41-52
+- [x] T006 [P] Contract test POST /api/v1/auth/otp/request in tests/integration/features/otp-auth/request.test.ts - See contracts/otp-auth-api.yaml:8-59
+- [x] T007 [P] Contract test POST /api/v1/auth/otp/verify in tests/integration/features/otp-auth/verify.test.ts - See contracts/otp-auth-api.yaml:61-136
+- [x] T008 [P] Contract test GET /api/v1/auth/otp/status in tests/integration/features/otp-auth/status.test.ts - See contracts/otp-auth-api.yaml:138-190
+- [x] T009 [P] Integration test new user OTP registration flow in tests/integration/features/otp-auth/new-user-flow.test.ts - See quickstart.md:51-105
+- [x] T010 [P] Integration test existing user OTP login flow in tests/integration/features/otp-auth/existing-user-flow.test.ts - See quickstart.md:107-127
+- [x] T011 [P] Integration test rate limiting (3 per 15 min) in tests/integration/features/otp-auth/rate-limiting.test.ts - See quickstart.md:152-173
+- [x] T012 [P] Unit test OTP generation and validation in tests/unit/utils/otp.utils.test.ts - See research.md:57-73
+- [x] T013 [P] Unit test email provider factory in tests/unit/utils/email.utils.test.ts - See research.md:41-52
 
 ## Phase 3.3: Core Implementation (ONLY after tests are failing)
-- [ ] T014 Create Prisma migration for OtpRequest model and User updates - See data-model.md:48-75 for schema, data-model.md:127-147 for SQL
-- [ ] T015 [P] Implement OTP generation utilities in src/utils/otp.utils.ts - See research.md:57-73 for crypto.randomInt() pattern
-- [ ] T016 [P] Implement email provider factory and mock provider in src/utils/email.utils.ts - See research.md:41-52 for interface & factory
-- [ ] T017 [P] Implement Mailgun provider in src/utils/email.utils.ts - See research.md:18-24 for Mailgun config
-- [ ] T018 [P] Create OTP validation schemas in src/features/otp-auth/otp-auth.validation.ts - See contracts/otp-auth-api.yaml for request/response schemas
-- [ ] T019 [P] Implement OTP service business logic in src/features/otp-auth/otp-auth.service.ts - See data-model.md:77-123 for query patterns, include inline cleanup
-- [ ] T020 [P] Implement OTP controller request handlers in src/features/otp-auth/otp-auth.controller.ts - See contracts/otp-auth-api.yaml for endpoints
-- [ ] T021 Create OTP routes with rate limiting in src/features/otp-auth/otp-auth.routes.ts - Use existing createRateLimiter with email key
-- [ ] T022 Register OTP routes in src/app.ts - See plan.md:98-104 for feature structure
+- [x] T014 Create Prisma migration for OtpRequest model and User updates - See data-model.md:48-75 for schema, data-model.md:127-147 for SQL
+- [x] T015 [P] Implement OTP generation utilities in src/utils/otp.utils.ts - See research.md:57-73 for crypto.randomInt() pattern
+- [x] T016 [P] Implement email provider factory and mock provider in src/utils/email.utils.ts - See research.md:41-52 for interface & factory
+- [x] T017 [P] Implement Mailgun provider in src/utils/email.utils.ts - See research.md:18-24 for Mailgun config
+- [x] T018 [P] Create OTP validation schemas in src/features/otp-auth/otp-auth.validation.ts - See contracts/otp-auth-api.yaml for request/response schemas
+- [x] T019 [P] Implement OTP service business logic in src/features/otp-auth/otp-auth.service.ts - See data-model.md:77-123 for query patterns, include inline cleanup
+- [x] T020 [P] Implement OTP controller request handlers in src/features/otp-auth/otp-auth.controller.ts - See contracts/otp-auth-api.yaml for endpoints
+- [x] T021 Create OTP routes with rate limiting in src/features/otp-auth/otp-auth.routes.ts - Use existing createRateLimiter with email key
+- [x] T022 Register OTP routes in src/app.ts - See plan.md:98-104 for feature structure
 
 ## Phase 3.4: Integration
 - [ ] T023 Update User service to handle OTP-created users - See data-model.md:114-123 for upsert pattern
@@ -111,9 +111,9 @@
 ## Parallel Example
 ```
 # Launch T006-T013 together (all test files):
-Task: "Contract test POST /api/auth/otp/request in tests/integration/features/otp-auth/request.test.ts"
-Task: "Contract test POST /api/auth/otp/verify in tests/integration/features/otp-auth/verify.test.ts"
-Task: "Contract test GET /api/auth/otp/status in tests/integration/features/otp-auth/status.test.ts"
+Task: "Contract test POST /api/v1/auth/otp/request in tests/integration/features/otp-auth/request.test.ts"
+Task: "Contract test POST /api/v1/auth/otp/verify in tests/integration/features/otp-auth/verify.test.ts"
+Task: "Contract test GET /api/v1/auth/otp/status in tests/integration/features/otp-auth/status.test.ts"
 Task: "Integration test new user OTP registration flow"
 Task: "Integration test existing user OTP login flow"
 Task: "Integration test rate limiting"
@@ -187,9 +187,9 @@ const createEmailProvider = (): EmailProvider => {
 *Applied during main() execution*
 
 1. **From Contracts**:
-   - POST /api/auth/otp/request → T006 contract test [P]
-   - POST /api/auth/otp/verify → T007 contract test [P]
-   - GET /api/auth/otp/status → T008 contract test [P]
+   - POST /api/v1/auth/otp/request → T006 contract test [P]
+   - POST /api/v1/auth/otp/verify → T007 contract test [P]
+   - GET /api/v1/auth/otp/status → T008 contract test [P]
 
 2. **From Data Model**:
    - OtpRequest entity → T014 migration task

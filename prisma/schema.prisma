@@ -14,12 +14,28 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique @map("email")
-  password  String   @map("password")
-  name      String   @map("name")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  
+  id          Int       @id @default(autoincrement())
+  email       String    @unique @db.VarChar(255)
+  password    String?   @db.VarChar(255) // Nullable for OTP-only users
+  name        String?   @db.VarChar(255)
+  createdVia  String    @default("password") @map("created_via") @db.VarChar(20)
+  lastOtpAt   DateTime? @map("last_otp_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
   @@map("users")
+}
+
+model OtpRequest {
+  id        Int      @id @default(autoincrement())
+  email     String   @db.VarChar(255)
+  code      String   @db.VarChar(6)
+  expiresAt DateTime @map("expires_at")
+  attempts  Int      @default(0)
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([email])
+  @@index([code, email])
+  @@map("otp_requests")
 }

@@ -5,7 +5,7 @@ info:
   description: API endpoints for OTP-based email authentication
 
 paths:
-  /api/auth/otp/request:
+  /api/v1/auth/otp/request:
     post:
       summary: Request OTP code
       description: Send an OTP code to the specified email address
@@ -57,7 +57,7 @@ paths:
                   code: RATE_LIMIT_EXCEEDED
                   details: Maximum 3 requests per 15 minutes
 
-  /api/auth/otp/verify:
+  /api/v1/auth/otp/verify:
     post:
       summary: Verify OTP code
       description: Verify the OTP code and authenticate the user
@@ -134,7 +134,7 @@ paths:
                 error:
                   code: OTP_BLOCKED
 
-  /api/auth/otp/status:
+  /api/v1/auth/otp/status:
     get:
       summary: Check OTP request status
       description: Check if there's an active OTP request for an email

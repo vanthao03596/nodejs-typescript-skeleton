@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import { authRoutes } from './features/auth/auth.routes';
+import { otpAuthRoutes } from './features/otp-auth/otp-auth.routes';
 import { healthRoutes } from './features/health/health.routes';
 import { globalRateLimit } from './middleware/rateLimiter.middleware';
 import { errorHandler, notFound } from './middleware/error.middleware';
@@ -26,6 +27,7 @@ app.use(globalRateLimit);
 
 app.use('/api/v1/health', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/auth/otp', otpAuthRoutes);
 
 app.get('/', (_req, res) => {
   successResponse(res, {

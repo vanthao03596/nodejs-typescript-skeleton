@@ -51,7 +51,7 @@ npm run dev
 
 #### Step 1: Request OTP for new email
 ```bash
-curl -X POST http://localhost:3000/api/auth/otp/request \
+curl -X POST http://localhost:3000/api/v1/auth/otp/request \
   -H "Content-Type: application/json" \
   -d '{
     "email": "newuser@example.com"
@@ -77,7 +77,7 @@ curl -X POST http://localhost:3000/api/auth/otp/request \
 
 #### Step 2: Verify OTP (creates new user)
 ```bash
-curl -X POST http://localhost:3000/api/auth/otp/verify \
+curl -X POST http://localhost:3000/api/v1/auth/otp/verify \
   -H "Content-Type: application/json" \
   -d '{
     "email": "newuser@example.com",
@@ -108,7 +108,7 @@ curl -X POST http://localhost:3000/api/auth/otp/verify \
 
 #### Step 1: Request OTP for existing user
 ```bash
-curl -X POST http://localhost:3000/api/auth/otp/request \
+curl -X POST http://localhost:3000/api/v1/auth/otp/request \
   -H "Content-Type: application/json" \
   -d '{
     "email": "existing@example.com"
@@ -117,7 +117,7 @@ curl -X POST http://localhost:3000/api/auth/otp/request \
 
 #### Step 2: Verify OTP
 ```bash
-curl -X POST http://localhost:3000/api/auth/otp/verify \
+curl -X POST http://localhost:3000/api/v1/auth/otp/verify \
   -H "Content-Type: application/json" \
   -d '{
     "email": "existing@example.com",
@@ -129,7 +129,7 @@ curl -X POST http://localhost:3000/api/auth/otp/verify \
 
 #### Invalid OTP Code
 ```bash
-curl -X POST http://localhost:3000/api/auth/otp/verify \
+curl -X POST http://localhost:3000/api/v1/auth/otp/verify \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -153,7 +153,7 @@ curl -X POST http://localhost:3000/api/auth/otp/verify \
 ```bash
 # Make 4 requests within 15 minutes
 for i in {1..4}; do
-  curl -X POST http://localhost:3000/api/auth/otp/request \
+  curl -X POST http://localhost:3000/api/v1/auth/otp/request \
     -H "Content-Type: application/json" \
     -d '{"email": "ratelimit@example.com"}'
 done
@@ -177,7 +177,7 @@ Wait 10+ minutes after requesting OTP, then try to verify.
 ### Scenario 4: Check OTP Status
 
 ```bash
-curl -X GET "http://localhost:3000/api/auth/otp/status?email=user@example.com"
+curl -X GET "http://localhost:3000/api/v1/auth/otp/status?email=user@example.com"
 ```
 
 **Response with active OTP:**

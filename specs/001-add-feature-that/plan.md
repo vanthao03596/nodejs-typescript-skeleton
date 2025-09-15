@@ -159,9 +159,9 @@ tests/
    - Session entity: user_id, token, expires_at
 
 2. **Generate API contracts** from functional requirements:
-   - POST /api/auth/otp/request - Request OTP
-   - POST /api/auth/otp/verify - Verify OTP and authenticate
-   - GET /api/auth/otp/status - Check OTP request status
+   - POST /api/v1/auth/otp/request - Request OTP
+   - POST /api/v1/auth/otp/verify - Verify OTP and authenticate
+   - GET /api/v1/auth/otp/status - Check OTP request status
    - Output OpenAPI schema to `/contracts/`
 
 3. **Generate contract tests** from contracts:

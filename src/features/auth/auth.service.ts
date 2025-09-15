@@ -32,6 +32,8 @@ export class AuthService {
         id: true,
         email: true,
         name: true,
+        createdVia: true,
+        lastOtpAt: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -51,6 +53,11 @@ export class AuthService {
     });
 
     if (!user) {
+      throw new AuthenticationError('Invalid credentials');
+    }
+
+    // Check if user has a password (OTP users might not have passwords)
+    if (!user.password) {
       throw new AuthenticationError('Invalid credentials');
     }
 
@@ -77,6 +84,8 @@ export class AuthService {
         id: true,
         email: true,
         name: true,
+        createdVia: true,
+        lastOtpAt: true,
         createdAt: true,
         updatedAt: true,
       },
